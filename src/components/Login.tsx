@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; // Eye icons from React Icons
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { RootState } from "../store/store";
 
 // Define the shape of the response data from the API
 interface LoginResponse {
@@ -16,6 +17,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { role } = useSelector((state: RootState) => state.user);
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -28,19 +30,21 @@ const Login: React.FC = () => {
       }
 
       const data: LoginResponse = await response.json();
-      console.log(data)
       dispatch(setUser({ username: data.username, role: data.role }));
-
-      // Navigate based on role
-      if (data.role === "admin") {
-        navigate("/admin"); // Navigate to Admin component
-      } else {
-        navigate("/user"); // Navigate to User component
-      }
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+
+  useEffect(() => {
+    if (role) {
+      if (role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/user");
+      }
+    }
+  }, [role]); // Dependencies include role and navigate
 
   return (
     <div className="flex h-screen">
