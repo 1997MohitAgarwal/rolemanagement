@@ -18,15 +18,11 @@ const userSlice = createSlice({
       state.username = action.payload.username;
       state.role = action.payload.role;
     },
-    clearUser(state) {
-      state.username = '';
-      state.role = '';
-    },
     updateUserRole(state, action: PayloadAction<string>) { // Action to update the role
       state.role = action.payload; // Update the role based on the provided payload
     },
   },
 });
 
-export const { setUser, clearUser, updateUserRole } = userSlice.actions;
+export const { setUser, updateUserRole } = userSlice.actions;
 export default userSlice.reducer;
