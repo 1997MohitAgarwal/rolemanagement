@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import { useDispatch, useSelector } from "react-redux";
@@ -73,9 +73,14 @@ const User: React.FC = () => {
   const handleRoleUpdate = () => {
     const newRole = role === "admin" ? "user" : "admin";
     dispatch(updateUserRole(newRole));
-    navigate(`/${newRole}`);
   };
 
+  useEffect(() => {
+    if (role) {
+      navigate(`/${role}`);
+    }
+  }, [role]);
+  
   return (
     <div className="p-8">
       <button
@@ -86,12 +91,12 @@ const User: React.FC = () => {
       </button>
 
       {/* Navbar */}
-      <nav className="mb-8">
+      <nav className="mb-8 flex justify-end">
         <button
           onClick={() => handleTabClick("dashboard")}
           className={`px-4 py-2 ${
             activeTab === "dashboard"
-              ? "text-orange-500 underline"
+              ? "text-orange-500"
               : "text-gray-600"
           }`}
         >
@@ -101,7 +106,7 @@ const User: React.FC = () => {
           onClick={() => handleTabClick("invoices")}
           className={`px-4 py-2 ml-4 ${
             activeTab === "invoices"
-              ? "text-orange-500 underline"
+              ? "text-orange-500"
               : "text-gray-600"
           }`}
         >
@@ -148,16 +153,16 @@ const User: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">Invoices</h2>
 
           {/* Summary Grid */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="bg-green-100 p-4 rounded-lg shadow text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-8">
+            <div className="bg-green-100 p-4 rounded-lg shadow text-center h-64 flex flex-col justify-center items-center">
               <h3 className="text-lg font-semibold">Paid Invoices</h3>
               <p className="text-2xl">{paidInvoices}</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg shadow text-center">
+            <div className="bg-red-100 p-4 rounded-lg shadow text-center h-64 flex flex-col justify-center items-center">
               <h3 className="text-lg font-semibold">Due Invoices</h3>
               <p className="text-2xl">{dueInvoices}</p>
             </div>
-            <div className="bg-blue-100 p-4 rounded-lg shadow text-center">
+            <div className="bg-blue-100 p-4 rounded-lg shadow text-center h-64 flex flex-col justify-center items-center">
               <h3 className="text-lg font-semibold">Total Invoices</h3>
               <p className="text-2xl">{totalInvoices}</p>
             </div>

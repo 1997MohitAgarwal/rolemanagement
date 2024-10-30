@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -68,8 +68,13 @@ const Admin: React.FC = () => {
   const handleRoleUpdate = () => {
     const newRole = role === "admin" ? "user" : "admin";
     dispatch(updateUserRole(newRole));
-    navigate(`/${newRole}`);
   };
+
+  useEffect(() => {
+    if (role) {
+      navigate(`/${role}`);
+    }
+  }, [role]);
 
   const handleAddUser = (): void => {
     const newUser: User = {
@@ -129,7 +134,7 @@ const Admin: React.FC = () => {
 
       {/* Navbar */}
       <nav className="mb-8">
-        <ul className="flex space-x-4">
+        <ul className="flex space-x-4 justify-end">
           <li>
             <button
               onClick={() => setActiveTab("dashboard")}
